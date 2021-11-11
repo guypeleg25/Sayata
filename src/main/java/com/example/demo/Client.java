@@ -1,29 +1,53 @@
 package com.example.demo;
 
-import com.example.demo.Server.ServerConnection;
-
+import java.util.*;
+import java.net.*;
 import java.io.*;
-import java.net.Socket;
 
-public class Client {
-    private static final String SERVER_IP = "127.0.0.1";
-    private static final Integer SERVER_PORT = 9090;
-    public static void main(String[] args) throws IOException {
+public class Client
+{
 
-        System.out.println("Client is started");
-        Socket socket = new Socket(SERVER_IP, SERVER_PORT);
-        ServerConnection serverConnection = new ServerConnection(socket);
-        BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args)
+    {
 
-        new Thread(serverConnection).start();
-        while (true) {
-            System.out.println("> ");
-            String command = keyboard.readLine();
-            if (command.equals("exit")) {
-                socket.close();
-            } else {
-                System.out.println("I AM NOT EXIT");
+        Socket connection;
+        ObjectOutputStream output;
+        ObjectInputStream input;
+        Scanner myInput;
+        Object obj;
+        String msg="";
+
+        try
+        {
+            connection=new Socket("localhost",8000);
+            output=new ObjectOutputStream(connection.getOutputStream());
+            input=new ObjectInputStream(connection.getInputStream());
+            myInput=new Scanner(System.in);
+
+
+            while(true)
+            {
+                System.out.println("Enter String");
+                msg=myInput.nextLine();
+
+                output.writeObject(msg);
+                output.flush();
+
+                obj=(Object)input.readObject();
+                System.out.println(obj.toString());
             }
         }
+
+        catch(ClassNotFoundException cnfe)
+        {
+            cnfe.printStackTrace();
+        }
+
+        catch(IOException ioe)
+        {
+            ioe.printStackTrace();
+        }
+
     }
+
 }

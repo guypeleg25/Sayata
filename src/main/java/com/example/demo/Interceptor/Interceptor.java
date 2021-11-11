@@ -1,41 +1,26 @@
 package com.example.demo.Interceptor;
 
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
+import com.example.demo.Util.Builder;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 
-public class Interceptor implements HandlerInterceptor {
+public class Interceptor {
 
+    //TODO move to consts
+    HashMap<String,String> map = new HashMap<>();
+    public static String checkOperation(String string) {
+        if (string.contains(" ")) {
+            string = string.substring(0, string.indexOf(" "));
+        }
+        return string;
 
-    @Override
-    public boolean preHandle(HttpServletRequest request,
-                             HttpServletResponse response, Object handler) throws Exception {
-
-        System.out.println("Inside pre handle");
-//        String body = request.getReader().lines()
-//                .reduce("", (accumulator, actual) -> accumulator + actual);
-//        System.out.println(body);
-//
-//
-//        if(request.getRequestURI().endsWith("home")){
-////            response.sendRedirect("http://localhost:8080/home/createSubmission");
-//
-//            return false;
-//        }
-
-        return true;
     }
 
-    @Override
-    public void postHandle(HttpServletRequest request,
-                           HttpServletResponse response, Object handler,
-                           ModelAndView modelAndView) throws Exception {
-
-        System.out.println("Inside post handle");
+    public static Object parse(Object obj){
+        String operationName = checkOperation((String) obj);
+        return Builder.buildInput(((String) obj).split("\\s+") , operationName);
     }
+
 
 
 }
