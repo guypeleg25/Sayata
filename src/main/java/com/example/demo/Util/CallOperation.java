@@ -8,7 +8,8 @@ public class CallOperation {
         RestTemplate restTemplate = new RestTemplate();
         String urlOperation = Constants.mapFromOperationNameToAPI.get(operationName);
         switch(operationName){
-            case "create": case "update": case "bind":
+
+            case "create": case "update": case "bind": case "login" : case "register":
                 return restTemplate.postForObject(urlOperation,input,String.class);
 
             case "get":
@@ -16,6 +17,8 @@ public class CallOperation {
 
             case "list":
                 return restTemplate.getForObject(urlOperation,String.class);
+
+
         }
         return restTemplate;
     }

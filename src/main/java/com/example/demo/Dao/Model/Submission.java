@@ -24,10 +24,5 @@ public class Submission {
     Enum status = SubmissionStatus.newSubmission;
     String signedApplicationPath;
 
-    public Submission(String companyName,String addressName, Integer annualRevenue){
-        this.setCompanyName(companyName);
-        this.setAddressName(addressName);
-        this.setAnnualRevenue(annualRevenue);
-    }
 
 }

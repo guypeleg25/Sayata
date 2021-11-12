@@ -2,7 +2,9 @@ package com.example.demo.Service;
 
 import com.example.demo.Controller.Bo.*;
 import com.example.demo.Dao.Model.Submission;
+import com.example.demo.Dao.Model.User;
 import com.example.demo.Dao.Repository.SubmissionRepository;
+import com.example.demo.Dao.Repository.UserRepository;
 import com.example.demo.Util.Builder;
 import com.example.demo.Util.SubmissionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +19,11 @@ public class ServiceImpl implements Service{
     @Autowired
     SubmissionRepository submissionRepository;
 
+    @Autowired
+    UserRepository userRepository;
     @Override
     public CreateSubmissionOutput createSubmission(CreateSubmissionInput createSubmissionInput) {
-
+        
         Submission submission = submissionRepository.findByCompanyNameAndAddressName(createSubmissionInput.getCompanyName(),
                 createSubmissionInput.getAddressName());
         if(!ObjectUtils.isEmpty(submission)){
@@ -70,6 +74,24 @@ public class ServiceImpl implements Service{
             return GetListOnlyBoundOutput.builder().msg("There is no submission with bound status").build();
         }
         return GetListOnlyBoundOutput.builder().msg("Successes return bound list").submissionList(submissionList).build();
+    }
+
+    @Override
+    public String registerUser(User user) {
+
+        if(userRepository.findById(user.getId()).isEmpty()){
+             userRepository.save(user);
+             return "Register successes";
+        }
+        return "Register failed";
+    }
+
+    @Override
+    public String login(User user) {
+        if(userRepository.findByIdAndPassword(user.getId(),user.getPassword()) != null){
+            return "Login success";
+        }
+        return "Login failed - you need to try again or to register";
     }
 
     private Submission checkIfTheSubmissionExistsById(String id){

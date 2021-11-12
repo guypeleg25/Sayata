@@ -1,12 +1,11 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Controller.Bo.*;
-import com.example.demo.Dao.Model.Submission;
+import com.example.demo.Dao.Model.User;
 import com.example.demo.Service.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 public class Controller {
@@ -44,4 +43,16 @@ public class Controller {
         return service.getListOnlyBound();
     }
 
+
+    @RequestMapping(method = RequestMethod.POST, value = "/registerUser")
+    public String registerUser(@RequestBody User user){
+        System.out.println("registerUser was activated");
+        return  service.registerUser(user);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/login")
+    public String login(@RequestBody User user){
+        System.out.println("login was activated");
+        return service.login(user);
+    }
 }

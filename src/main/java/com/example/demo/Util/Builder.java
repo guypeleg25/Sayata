@@ -4,6 +4,7 @@ import com.example.demo.Controller.Bo.BindSubmissionInput;
 import com.example.demo.Controller.Bo.CreateSubmissionInput;
 import com.example.demo.Controller.Bo.UpdateSubmissionInput;
 import com.example.demo.Dao.Model.Submission;
+import com.example.demo.Dao.Model.User;
 
 public class Builder {
 
@@ -22,9 +23,11 @@ public class Builder {
                 case "BindSubmissionInput":
                     return BindSubmissionInput.builder().
                             id(values[2]).signedApplicationPath(values[3]).build();
-
                 case "ListSubmission":
                     return values;
+
+                case "User": case "Register":
+                    return User.builder().id(values[1]).password(values[2]).build();
 
             }
         return null;

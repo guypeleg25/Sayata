@@ -1,5 +1,9 @@
 package com.example.demo.ClientHandler;
+import com.example.demo.Dao.Model.User;
 import com.example.demo.Interceptor.Interceptor;
+import org.springframework.data.util.Pair;
+import org.springframework.web.client.RestTemplate;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -16,6 +20,8 @@ public class HandleClient implements Runnable {
     ObjectOutputStream output;
     Object obj;
     List<Object> historyCommands =new ArrayList<>();
+    Boolean userLogged = false;
+
 
     public HandleClient(Socket connection, int clientNumber) {
         this.connection=connection;
@@ -26,26 +32,39 @@ public class HandleClient implements Runnable {
         try {
             input = new ObjectInputStream(connection.getInputStream());
             output = new ObjectOutputStream(connection.getOutputStream());
+
             while (true) {
                 obj = input.readObject();
-                if (obj.equals("exit")) {
-                    connection.close();
+
+                String operationName = Interceptor.getOperationName(String.valueOf(obj));
+                if(operationName.equals("login") || operationName.equals("register")){
+                    Object outputFromAPI = Interceptor.parse(obj);
+                    output.writeObject(outputFromAPI);
+                    if(outputFromAPI.equals("Login success")){
+                        userLogged = true;
+                    }
+                    continue;
                 }
-                //TODO fix history command
-                if (obj.equals("history")) {
-                   System.out.println(historyCommands);
-                   for(Object s : historyCommands){
-                       output.writeChars(String.valueOf(s));
-                       output.flush();
-                   }
-                }
-               else{
-                    historyCommands.add(String.valueOf(obj));
+                if (userLogged) {
                     Object outputFromAPI = Interceptor.parse(obj);
                     output.writeObject(outputFromAPI);
                 }
-                output.flush();
-            }
+                    if (obj.equals("history")) {
+                        System.out.println(historyCommands);
+                        for (Object s : historyCommands) {
+                            output.writeChars(String.valueOf(s));
+                            output.flush();
+                        }
+                    }
+                        if(!userLogged){
+                            output.writeObject("You need to login first");
+                        }
+                        if (obj.equals("exit")) {
+                            connection.close();
+                        }
+                    historyCommands.add(String.valueOf(obj));
+                    output.flush();
+                }
 
 
         } catch (ClassNotFoundException cnfe) {

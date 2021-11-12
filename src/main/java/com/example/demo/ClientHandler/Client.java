@@ -29,7 +29,7 @@ public class Client
 
             while(true)
             {
-                System.out.println("Enter String");
+                System.out.println("Enter your command");
                 msg=myInput.nextLine();
 
                 output.writeObject(msg);

@@ -8,12 +8,14 @@ public class Constants {
     public static final Integer SERVER_PORT = 8000;
     public static String URL = "http://localhost:8080/";
 
-    public static HashMap<String, String> mapFromOperationNameToInputClass = new HashMap<>();
+        public static HashMap<String, String> mapFromOperationNameToInputClass = new HashMap<>();
     static {
         mapFromOperationNameToInputClass.put("create" , "CreateSubmissionInput");
         mapFromOperationNameToInputClass.put("update" , "UpdateSubmissionInput");
         mapFromOperationNameToInputClass.put("bind" , "BindSubmissionInput");
         mapFromOperationNameToInputClass.put("get" , "GetSubMission");
+        mapFromOperationNameToInputClass.put("login" , "User");
+        mapFromOperationNameToInputClass.put("register" , "User");
     }
     public static HashMap<String, String> mapFromOperationNameToAPI = new HashMap<>();
     static {
@@ -22,5 +24,7 @@ public class Constants {
         mapFromOperationNameToAPI.put("get" , URL+"getSubmission/");
         mapFromOperationNameToAPI.put("bind" , URL+"bindSubmission");
         mapFromOperationNameToAPI.put("list" , URL+"getListOnlyBound");
+        mapFromOperationNameToAPI.put("login" , URL+"login");
+        mapFromOperationNameToAPI.put("register" , URL+"registerUser");
     }
 }

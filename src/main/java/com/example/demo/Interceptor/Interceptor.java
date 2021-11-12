@@ -21,7 +21,4 @@ public class Interceptor {
         return CallOperation.callAPI(operationName,input);
     }
 
-
-
-
 }
