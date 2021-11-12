@@ -1,16 +1,13 @@
 package com.example.demo.Service;
 
-import com.example.demo.Controller.Bo.CreateSubmissionInput;
-import com.example.demo.Controller.Bo.CreateSubmissionOutput;
-import com.example.demo.Controller.Bo.UpdateSubmissionInput;
+import com.example.demo.Controller.Bo.*;
 import com.example.demo.Dao.Model.Submission;
 import com.example.demo.Dao.Repository.SubmissionRepository;
-import com.example.demo.ExistsExp;
 import com.example.demo.Util.Builder;
+import com.example.demo.Util.SubmissionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,9 +20,10 @@ public class ServiceImpl implements Service{
     @Override
     public CreateSubmissionOutput createSubmission(CreateSubmissionInput createSubmissionInput) {
 
-        Submission submission = submissionRepository.findByCompanyNameAndAddressName(createSubmissionInput.getCompanyName(),createSubmissionInput.getAddressName());
+        Submission submission = submissionRepository.findByCompanyNameAndAddressName(createSubmissionInput.getCompanyName(),
+                createSubmissionInput.getAddressName());
         if(!ObjectUtils.isEmpty(submission)){
-            throw new ExistsExp(ServiceImpl.class.getName(), "The Submission is exists");
+            return CreateSubmissionOutput.builder().msg("Submission is exits with the parameters").build();
         }
         Submission s = submissionRepository.save(Builder.buildSubmission(createSubmissionInput));
         return CreateSubmissionOutput.builder().id(s.getId()).msg("Submission is saved").build();
@@ -34,31 +32,55 @@ public class ServiceImpl implements Service{
     @Override
     public String updateSubmission(UpdateSubmissionInput updateSubmissionInput) {
 
-        List<Submission> list = (List<Submission>) submissionRepository.findAll();
-        System.out.println(list);
-        Optional<Submission> submission = submissionRepository.findById(updateSubmissionInput.getId());
-        if(ObjectUtils.isEmpty(submission.get())){
-            throw new ExistsExp(ServiceImpl.class.getName(), "The Submission is exists");
+        Submission submission = checkIfTheSubmissionExistsById(updateSubmissionInput.getId());
+        if(ObjectUtils.isEmpty(submission)){
+           return "Didn't find the submission with id" + updateSubmissionInput.getId();
         }
         else{
-            submission.get().setCompanyName(updateSubmissionInput.getCompanyName());
-            submission.get().setAddressName(updateSubmissionInput.getCompanyName());
-            submission.get().setAnnualRevenue(updateSubmissionInput.getAnnualRevenue());
-            submissionRepository.save(submission.get());
+            submission.setCompanyName(updateSubmissionInput.getCompanyName());
+            submission.setAddressName(updateSubmissionInput.getCompanyName());
+            submission.setAnnualRevenue(updateSubmissionInput.getAnnualRevenue());
+            submissionRepository.save(submission);
             return "Successes update";
         }
     }
 
     @Override
-    public void getSubmission(String id) {
-        //TODO add bind logic
-        Optional<Submission> submission = submissionRepository.findById(id);
-        if(ObjectUtils.isEmpty(submission.get())){
-            throw new ExistsExp(ServiceImpl.class.getName(), "The Submission is not exists");
+    public GetSubmissionOutput getSubmission(String id) {
+        Submission submission = checkIfTheSubmissionExistsById(id);
+        if(ObjectUtils.isEmpty(submission)){
+            return GetSubmissionOutput.builder().msg("The submission id does not exits").build();
         }
         else{
-            //RETURN SUB
+            return GetSubmissionOutput.builder().msg("Successes to get the submission").submission(submission).build();
         }
+    }
 
+    @Override
+    public String bindSubmission(BindSubmissionInput bindSubmissionInput) {
+        Submission submission = checkIfTheSubmissionExistsById(bindSubmissionInput.getId());
+        submission.setSignedApplicationPath(bindSubmissionInput.getSignedApplicationPath());
+        submission.setStatus(SubmissionStatus.boundSubmission);
+        submissionRepository.save(submission);
+
+        return "Successes bindSubmission";
+    }
+
+    @Override
+    public GetListOnlyBoundOutput getListOnlyBound() {
+        List<Submission> submissionList = submissionRepository.findByStatus(SubmissionStatus.boundSubmission);
+        if(ObjectUtils.isEmpty(submissionList)){
+            return GetListOnlyBoundOutput.builder().msg("There is no submission with bound status").build();
+        }
+        return GetListOnlyBoundOutput.builder().msg("Successes return bound list").submissionList(submissionList).build();
+    }
+
+    private Submission checkIfTheSubmissionExistsById(String id){
+        Optional<Submission> submission = submissionRepository.findById(id);
+
+        if(submission.isPresent() || submission.isEmpty()){
+            return null;
+        }
+        return submission.get();
     }
 }

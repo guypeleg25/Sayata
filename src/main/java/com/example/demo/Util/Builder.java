@@ -1,28 +1,34 @@
 package com.example.demo.Util;
 
+import com.example.demo.Controller.Bo.BindSubmissionInput;
 import com.example.demo.Controller.Bo.CreateSubmissionInput;
+import com.example.demo.Controller.Bo.UpdateSubmissionInput;
 import com.example.demo.Dao.Model.Submission;
-
-import java.util.HashMap;
 
 public class Builder {
 
 
-    static HashMap<String,String> map = new HashMap<>();
-    public static CreateSubmissionInput buildCreate(String[] values){
-        return CreateSubmissionInput.builder().
-                companyName(values[0]).addressName(values[1]).annualRevenue(Integer.valueOf(values[2])).build();
-    }
 
     public static Object buildInput(String[] values , String operationName){
-        map.put("create", "CreateSubmissionInput");
-        String inputName = map.get(operationName);
-        if(inputName.equals("CreateSubmissionInput")){
-            return CreateSubmissionInput.builder().
-                    companyName(values[2]).addressName(values[3]).annualRevenue(Integer.valueOf(values[4])).build();
-        }
+        String inputName = Constants.getMapOperationNameToInputClass().get(operationName);
+            switch (inputName) {
+                case "CreateSubmissionInput":
+                    return CreateSubmissionInput.builder().
+                            companyName(values[2]).addressName(values[3]).annualRevenue(Integer.valueOf(values[4])).build();
+                case "UpdateSubmissionInput":
+                    return UpdateSubmissionInput.builder().
+                            id(values[2]).companyName(values[3]).addressName(values[4]).annualRevenue(Integer.valueOf(values[5])).build();
+                case "GetSubmission":
+                    return values[2];
 
+                case "BindSubmissionInput":
+                    return BindSubmissionInput.builder().
+                            id(values[2]).signedApplicationPath(values[3]).build();
 
+                case "ListSubmission":
+                    return values;
+
+            }
         return null;
     }
     public static Submission buildSubmission(CreateSubmissionInput createSubmissionInput){

@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import com.example.demo.Util.Constants;
+
 import java.util.*;
 import java.net.*;
 import java.io.*;
@@ -19,7 +21,7 @@ public class Client
 
         try
         {
-            connection=new Socket("localhost",8000);
+            connection=new Socket(Constants.SERVER_IP,Constants.SERVER_PORT);
             output=new ObjectOutputStream(connection.getOutputStream());
             input=new ObjectInputStream(connection.getInputStream());
             myInput=new Scanner(System.in);
@@ -33,7 +35,7 @@ public class Client
                 output.writeObject(msg);
                 output.flush();
 
-                obj=(Object)input.readObject();
+                obj=input.readObject();
                 System.out.println(obj.toString());
             }
         }

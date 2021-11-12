@@ -22,7 +22,7 @@ public class Submission {
     String addressName;
     Integer annualRevenue;
     Enum status = SubmissionStatus.newSubmission;
-    //TODO sign
+    String signedApplicationPath;
 
     public Submission(String companyName,String addressName, Integer annualRevenue){
         this.setCompanyName(companyName);

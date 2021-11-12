@@ -1,12 +1,13 @@
 package com.example.demo.Service;
 
-import com.example.demo.Controller.Bo.CreateSubmissionInput;
-import com.example.demo.Controller.Bo.CreateSubmissionOutput;
-import com.example.demo.Controller.Bo.UpdateSubmissionInput;
+import com.example.demo.Controller.Bo.*;
+
 
 public interface Service {
 
     CreateSubmissionOutput createSubmission(CreateSubmissionInput createSubmissionInput);
     String updateSubmission (UpdateSubmissionInput updateSubmissionInput);
-    void getSubmission (String id);
+    GetSubmissionOutput getSubmission (String id);
+    String bindSubmission(BindSubmissionInput bindSubmissionInput);
+    GetListOnlyBoundOutput getListOnlyBound();
 }
