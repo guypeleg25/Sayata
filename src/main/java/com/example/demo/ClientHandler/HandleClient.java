@@ -1,7 +1,5 @@
-package com.example.demo;
-
+package com.example.demo.ClientHandler;
 import com.example.demo.Interceptor.Interceptor;
-import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -43,7 +41,6 @@ public class HandleClient implements Runnable {
                 }
                else{
                     historyCommands.add(String.valueOf(obj));
-                    System.out.println(obj);
                     Object outputFromAPI = Interceptor.parse(obj);
                     output.writeObject(outputFromAPI);
                 }

@@ -7,10 +7,8 @@ import com.example.demo.Dao.Model.Submission;
 
 public class Builder {
 
-
-
     public static Object buildInput(String[] values , String operationName){
-        String inputName = Constants.getMapOperationNameToInputClass().get(operationName);
+        String inputName = Constants.mapFromOperationNameToInputClass.get(operationName);
             switch (inputName) {
                 case "CreateSubmissionInput":
                     return CreateSubmissionInput.builder().

@@ -34,15 +34,13 @@ public class ServiceImpl implements Service{
 
         Submission submission = checkIfTheSubmissionExistsById(updateSubmissionInput.getId());
         if(ObjectUtils.isEmpty(submission)){
-           return "Didn't find the submission with id" + updateSubmissionInput.getId();
+           return "Didn't find the submission with id " + updateSubmissionInput.getId();
         }
-        else{
             submission.setCompanyName(updateSubmissionInput.getCompanyName());
             submission.setAddressName(updateSubmissionInput.getCompanyName());
             submission.setAnnualRevenue(updateSubmissionInput.getAnnualRevenue());
             submissionRepository.save(submission);
             return "Successes update";
-        }
     }
 
     @Override
@@ -51,9 +49,7 @@ public class ServiceImpl implements Service{
         if(ObjectUtils.isEmpty(submission)){
             return GetSubmissionOutput.builder().msg("The submission id does not exits").build();
         }
-        else{
             return GetSubmissionOutput.builder().msg("Successes to get the submission").submission(submission).build();
-        }
     }
 
     @Override
@@ -68,6 +64,7 @@ public class ServiceImpl implements Service{
 
     @Override
     public GetListOnlyBoundOutput getListOnlyBound() {
+
         List<Submission> submissionList = submissionRepository.findByStatus(SubmissionStatus.boundSubmission);
         if(ObjectUtils.isEmpty(submissionList)){
             return GetListOnlyBoundOutput.builder().msg("There is no submission with bound status").build();
@@ -76,9 +73,9 @@ public class ServiceImpl implements Service{
     }
 
     private Submission checkIfTheSubmissionExistsById(String id){
-        Optional<Submission> submission = submissionRepository.findById(id);
 
-        if(submission.isPresent() || submission.isEmpty()){
+        Optional<Submission> submission = submissionRepository.findById(id);
+        if(!submission.isPresent() || submission.isEmpty()){
             return null;
         }
         return submission.get();

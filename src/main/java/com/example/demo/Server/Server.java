@@ -1,6 +1,6 @@
 package com.example.demo.Server;
 
-import com.example.demo.HandleClient;
+import com.example.demo.ClientHandler.HandleClient;
 import com.example.demo.Util.Constants;
 
 import java.io.*;
@@ -14,7 +14,7 @@ public class Server {
         Integer clientNumber = 1;
 
         try {
-            serverSocket=new ServerSocket(Constants.SERVER_PORT);
+            serverSocket = new ServerSocket(Constants.SERVER_PORT);
             System.out.println("Waiting on Client");
             ExecutorService threadExecutor = Executors.newCachedThreadPool();
 

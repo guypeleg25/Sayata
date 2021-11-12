@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.ClientHandler;
 
 import com.example.demo.Util.Constants;
 
@@ -40,13 +40,11 @@ public class Client
             }
         }
 
-        catch(ClassNotFoundException cnfe)
-        {
+        catch(ClassNotFoundException cnfe) {
             cnfe.printStackTrace();
         }
 
-        catch(IOException ioe)
-        {
+        catch(IOException ioe) {
             ioe.printStackTrace();
         }
 
