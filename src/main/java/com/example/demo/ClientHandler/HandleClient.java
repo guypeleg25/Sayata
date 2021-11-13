@@ -1,5 +1,5 @@
 package com.example.demo.ClientHandler;
-import com.example.demo.CommandHandler;
+import com.example.demo.Interceptor.CommandHandler;
 import com.example.demo.Interceptor.Interceptor;
 
 import java.io.IOException;

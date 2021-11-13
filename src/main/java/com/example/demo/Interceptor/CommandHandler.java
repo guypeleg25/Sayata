@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.Interceptor;
 
 import com.example.demo.Interceptor.Interceptor;
 
