@@ -12,7 +12,6 @@ public class SatayaTaskApplication {
 		SpringApplication.run(SatayaTaskApplication.class, args);
 		System.out.println("Spring Boot is started");
 
-
 	}
 }
 

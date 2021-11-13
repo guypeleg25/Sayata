@@ -10,6 +10,7 @@ public class Builder {
 
     public static Object buildInput(String[] values , String operationName){
         String inputName = Constants.mapFromOperationNameToInputClass.get(operationName);
+        if(Constants.mapFromOperationNameToInputClass.containsKey(operationName)) {
             switch (inputName) {
                 case "CreateSubmissionInput":
                     return CreateSubmissionInput.builder().
@@ -19,17 +20,18 @@ public class Builder {
                             id(values[2]).companyName(values[3]).addressName(values[4]).annualRevenue(Integer.valueOf(values[5])).build();
                 case "GetSubmission":
                     return values[2];
-
                 case "BindSubmissionInput":
                     return BindSubmissionInput.builder().
                             id(values[2]).signedApplicationPath(values[3]).build();
                 case "ListSubmission":
                     return values;
-
-                case "User": case "Register":
+                case "AnnualRevenueList":
+                    return values[1];
+                case "User":
+                case "Register":
                     return User.builder().id(values[1]).password(values[2]).build();
-
             }
+        }
         return null;
     }
     public static Submission buildSubmission(CreateSubmissionInput createSubmissionInput){

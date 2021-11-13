@@ -1,8 +1,6 @@
 package com.example.demo.ClientHandler;
-import com.example.demo.Dao.Model.User;
+import com.example.demo.CommandHandler;
 import com.example.demo.Interceptor.Interceptor;
-import org.springframework.data.util.Pair;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -18,7 +16,7 @@ public class HandleClient implements Runnable {
     Integer clientNumber;
     ObjectInputStream input;
     ObjectOutputStream output;
-    Object obj;
+    Object command;
     List<Object> historyCommands =new ArrayList<>();
     Boolean userLogged = false;
 
@@ -34,36 +32,16 @@ public class HandleClient implements Runnable {
             output = new ObjectOutputStream(connection.getOutputStream());
 
             while (true) {
-                obj = input.readObject();
 
-                String operationName = Interceptor.getOperationName(String.valueOf(obj));
-                if(operationName.equals("login") || operationName.equals("register")){
-                    Object outputFromAPI = Interceptor.parse(obj);
-                    output.writeObject(outputFromAPI);
-                    if(outputFromAPI.equals("Login success")){
-                        userLogged = true;
-                    }
-                    continue;
-                }
-                if (userLogged) {
-                    Object outputFromAPI = Interceptor.parse(obj);
-                    output.writeObject(outputFromAPI);
-                }
-                    if (obj.equals("history")) {
-                        System.out.println(historyCommands);
-                        for (Object s : historyCommands) {
-                            output.writeChars(String.valueOf(s));
-                            output.flush();
-                        }
-                    }
-                        if(!userLogged){
-                            output.writeObject("You need to login first");
-                        }
-                        if (obj.equals("exit")) {
-                            connection.close();
-                        }
-                    historyCommands.add(String.valueOf(obj));
-                    output.flush();
+                command = input.readObject();
+                historyCommands.add(command);
+                String operationName = Interceptor.getOperationName(String.valueOf(command));
+
+                Object outputFromApi = userLogged ? CommandHandler.commandHandLer(operationName, command, true,historyCommands) :
+                            CommandHandler.commandHandLer(operationName, command, false,historyCommands);
+                    output.writeObject(outputFromApi);
+                    if (outputFromApi.equals("Login success")) userLogged = true;
+                    if (outputFromApi.equals("You need to login first")) continue;
                 }
 
 

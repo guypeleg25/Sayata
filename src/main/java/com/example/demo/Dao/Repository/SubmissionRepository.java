@@ -12,4 +12,6 @@ public interface SubmissionRepository extends CrudRepository<Submission,String> 
 
     Submission findByCompanyNameAndAddressName(String companyName , String addressName);
     List<Submission> findByStatus(SubmissionStatus status);
+
+
 }

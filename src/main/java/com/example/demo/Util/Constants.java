@@ -13,7 +13,9 @@ public class Constants {
         mapFromOperationNameToInputClass.put("create" , "CreateSubmissionInput");
         mapFromOperationNameToInputClass.put("update" , "UpdateSubmissionInput");
         mapFromOperationNameToInputClass.put("bind" , "BindSubmissionInput");
-        mapFromOperationNameToInputClass.put("get" , "GetSubMission");
+        mapFromOperationNameToInputClass.put("get" , "GetSubmission");
+        mapFromOperationNameToInputClass.put("list" , "ListSubmission");
+        mapFromOperationNameToInputClass.put("annualRevenue" , "AnnualRevenueList");
         mapFromOperationNameToInputClass.put("login" , "User");
         mapFromOperationNameToInputClass.put("register" , "User");
     }
@@ -24,6 +26,7 @@ public class Constants {
         mapFromOperationNameToAPI.put("get" , URL+"getSubmission/");
         mapFromOperationNameToAPI.put("bind" , URL+"bindSubmission");
         mapFromOperationNameToAPI.put("list" , URL+"getListOnlyBound");
+        mapFromOperationNameToAPI.put("annualRevenue" , URL+"getListByAnnualRevenue/");
         mapFromOperationNameToAPI.put("login" , URL+"login");
         mapFromOperationNameToAPI.put("register" , URL+"registerUser");
     }

@@ -3,7 +3,6 @@ package com.example.demo.Interceptor;
 import com.example.demo.Util.Builder;
 import com.example.demo.Util.CallOperation;
 
-import java.net.URISyntaxException;
 
 public class Interceptor {
 
@@ -15,9 +14,10 @@ public class Interceptor {
 
     }
 
-    public static Object parse(Object obj) throws URISyntaxException {
+    public static Object parse(Object obj) {
         String operationName = getOperationName((String) obj);
         Object input = Builder.buildInput(((String) obj).split("\\s+") , operationName);
+        if(input == null) return "The Interceptor does not know this operation";
         return CallOperation.callAPI(operationName,input);
     }
 

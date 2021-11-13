@@ -10,8 +10,11 @@ import com.example.demo.Util.SubmissionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
 public class ServiceImpl implements Service{
@@ -21,9 +24,10 @@ public class ServiceImpl implements Service{
 
     @Autowired
     UserRepository userRepository;
+
     @Override
     public CreateSubmissionOutput createSubmission(CreateSubmissionInput createSubmissionInput) {
-        
+
         Submission submission = submissionRepository.findByCompanyNameAndAddressName(createSubmissionInput.getCompanyName(),
                 createSubmissionInput.getAddressName());
         if(!ObjectUtils.isEmpty(submission)){
@@ -74,6 +78,12 @@ public class ServiceImpl implements Service{
             return GetListOnlyBoundOutput.builder().msg("There is no submission with bound status").build();
         }
         return GetListOnlyBoundOutput.builder().msg("Successes return bound list").submissionList(submissionList).build();
+    }
+    @Override
+    public List<Submission> getListByAnnualRevenue(Integer annualRevenue) {
+
+        List<Submission> submissionList = (List<Submission>) submissionRepository.findAll();
+        return submissionList.stream().filter(val -> val.getAnnualRevenue() > annualRevenue).collect(Collectors.toList());
     }
 
     @Override

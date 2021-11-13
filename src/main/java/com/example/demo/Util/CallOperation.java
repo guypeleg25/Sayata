@@ -12,7 +12,7 @@ public class CallOperation {
             case "create": case "update": case "bind": case "login" : case "register":
                 return restTemplate.postForObject(urlOperation,input,String.class);
 
-            case "get":
+            case "get": case "annualRevenue":
             return restTemplate.getForObject(urlOperation + input,String.class);
 
             case "list":
