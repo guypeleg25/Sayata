@@ -1,7 +1,5 @@
 package com.example.demo.Interceptor;
 
-import com.example.demo.Interceptor.Interceptor;
-
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -19,12 +17,12 @@ public class CommandHandler {
            return Interceptor.parse(obj);
         }
 
-        if(!userLogged){
-            return ("You need to login first");
+        if(operationName.equals("exit")){
+            return "Hasta la vista baby";
         }
 
-        if(operationName.equals("exit")){
-            return  "Hasta la vista baby";
+        if(!userLogged){
+            return ("You need to login first");
         }
 
         return null;

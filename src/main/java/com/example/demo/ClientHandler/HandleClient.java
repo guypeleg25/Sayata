@@ -40,10 +40,12 @@ public class HandleClient implements Runnable {
                 Object outputFromApi = userLogged ? CommandHandler.commandHandLer(operationName, command, true,historyCommands) :
                             CommandHandler.commandHandLer(operationName, command, false,historyCommands);
                     output.writeObject(outputFromApi);
+                    if(outputFromApi.equals("Hasta la vista baby")) connection.close();
                     if (outputFromApi.equals("Login success")) userLogged = true;
                     if (outputFromApi.equals("You need to login first")) continue;
-                }
 
+                    output.flush();
+            }
 
         } catch (ClassNotFoundException cnfe) {
             cnfe.printStackTrace();
